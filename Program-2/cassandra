@@ -6,15 +6,16 @@ cqlsh> create keyspace Employee with replication={
       'class':'SimpleStrategy','replication_factor':3};
 cqlsh> use Employee;
 
-
 2. Create a column family by name employee-Info with attributes Emp_Id Primary Key, Emp_Name, Designation, Date_of_Joining, Salary,Dept_Name.
 
 cqlsh:employee> create table Employee_Info(
-            ... Emp_id int Primary key,
+            ... Emp_id int ,
             ... Emp_name text,
             ... Date_of_joining text,
             ... Salary int,
-            ... dept_name text);
+            ... dept_name text,
+            ... primary key((Emp_id),Salary)
+            ... WITH CLUSTERING ORDER BY (Salary ASC));
       
 
 
@@ -34,23 +35,18 @@ Apply batch;
 
 cqlsh:employee> update Employee_Info Set Emp_name='arun' dept_name="ISE" where Emp_id=21;
 
-
 5. Sort the details of Employee records based onsalary.
-
 
 6. Alter the schema of the table Employee_Info  to add a column Projects which stores a set of Projects done by the corresponding Employee.
 
 cqlsh:employee> alter table Employee_Info add project set<text>;
 
-
 7. Update the altered table to add project names.
 
 cqlsh:employee> update Employee_Info set project=['apple','ios'] where Emp_id=21;
-
 
 8.Create a TTL of 15 seconds to display the
 values of Employees.
 
 cqlsh:employee> insert into Employee_Info(Emp_id,Emp_name,Designation,Date_of_joining,Salary,dept_name)values
                 ... (54,'arihant','manager','15-04-2021',11200,'CSE') using TTL 15;
-                
